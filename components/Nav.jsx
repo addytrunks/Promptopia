@@ -3,10 +3,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import {useState,useEffect} from 'react'
-import {signIn,signOut,getProviders} from 'next-auth/react'
+import {signIn,signOut,getProviders,useSession} from 'next-auth/react'
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const {data:session} = useSession();
   const [providers,setProviders] = useState(null);
   const [toggleDropDown,setToggleDropDown] = useState(false);
 
@@ -29,7 +29,7 @@ const Nav = () => {
 
       {/* Desktop Navigation */}
       <div className='md:flex lg:flex xl:flex 2xl:flex hidden'>
-        {isUserLoggedIn ? (
+        {session?.user ? (
           
           <div className='flex gap-3 md:gap-5'>
             <Link href='/create-prompt' className='black_btn'>
@@ -41,7 +41,7 @@ const Nav = () => {
             </button>
 
             <Link href='/profile'>
-              <Image src='/assets/images/logo.svg' width={37} height={37} className='rounded-full'/>
+              <Image src={session?.user.image} width={37} height={37} className='rounded-full'/>
             </Link>
           </div>
         ):(
@@ -59,9 +59,9 @@ const Nav = () => {
           
       {/* Mobile Navigation */}
       <div className='sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden relative'>
-            {isUserLoggedIn ? (
+            {session?.user ? (
               <div className='flex'>
-                  <Image src='/assets/images/logo.svg' width={37} height={37} onClick={() => setToggleDropDown(prevState => !prevState)} className='rounded-full'/>
+                  <Image src={session?.user.image} width={37} height={37} onClick={() => setToggleDropDown(prevState => !prevState)} className='rounded-full'/>
 
                   {toggleDropDown && (
                     <div className='dropdown'>
