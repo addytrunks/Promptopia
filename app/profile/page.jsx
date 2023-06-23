@@ -9,13 +9,24 @@ const ProfilePage = () => {
 
     const {data:session} = useSession()
     const [posts,setPosts] = useState([])
+    const router = useRouter()
 
-    const handleEdit = () => {
-        return null
+    const handleEdit = (post) => {
+        router.push(`/update-prompt?id=${post._id}`)
     }
 
-    const handleDelete = () => {
-        return null
+    const handleDelete = async(post) => {
+
+      const hasconfirmed = confirm('Do you want to delete')
+
+      if (hasconfirmed){
+        await fetch( `api/prompt/${post._id.toString()}`,{
+          method:'DELETE'
+        })
+        const filteredPosts = posts.filter(p => p._id !== post.id)
+        setPosts(filteredPosts)
+      }
+      
     }
 
     useEffect(() => {
