@@ -2,13 +2,17 @@
 
 import {useState} from 'react'
 import {useSession} from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import Form from '@components/Form'
-
 
 const CreatePrompt = () => {
 
-    const {data:session} = useSession()
+    const {data:session} = useSession({
+        required:true,
+        onUnauthenticated(){
+            redirect('/')
+        }
+    })
     const router = useRouter()
 
     const [submitting,setSubmitting] = useState(false)
